@@ -5,7 +5,7 @@ Official implementation of the paper **Physical Information Consistency for Sens
 
 ## Overall Framework
 
-![Overall framework](figures/overall_framework.pdf)
+![Overall framework](figures/overall_framework.png)
 
 Full-resolution figure: [figures/overall_framework.pdf](figures/overall_framework.pdf)
 
