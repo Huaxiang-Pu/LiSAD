@@ -1,11 +1,10 @@
-data/
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 *.db
-*.csv
 *.log
-*.pt
-*.pdf
-*.xlsx
+# *.csv
+# *.pt
+# *.pdf
+# *.xlsx
