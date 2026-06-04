@@ -164,20 +164,26 @@ def tas(
     raise ValueError("method must be 'pearson' or 'spearman'.")
 
 
-def evaluate_scores(y_true, scores):
+def evaluate_scores(y_true, scores, threshold=None):
     """Compute thresholded and threshold-free anomaly-detection metrics."""
     results = {}
 
     y_true_bin = (y_true > 0).astype(int)
-    attack_rate = y_true_bin.mean()
-    threshold = np.quantile(scores, 1.0 - attack_rate)
-    results["_threshold"] = threshold
+    fpr, tpr, thr = roc_curve(y_true_bin, scores)
+    
+    if threshold is not None:
+        results["_threshold"] = threshold
+    else:
+        # Select optimal threshold using Youden's J statistic (maximize TPR - FPR)
+        optimal_idx = np.argmax(tpr - fpr)
+        threshold = thr[optimal_idx]
+        results["_threshold"] = threshold
 
     results["AUC-ROC"] = roc_auc_score(y_true_bin, scores)
     results["AUC-PR"] = average_precision_score(y_true_bin, scores)
     results["F1"] = f1_score(y_true_bin, (scores >= threshold).astype(int))
 
-    fpr, tpr, thr = roc_curve(y_true_bin, scores)
+    
     idx = np.argmin(np.abs(tpr - 0.95))
     results["FPR@95TPR"] = fpr[idx]
 
